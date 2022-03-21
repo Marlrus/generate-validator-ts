@@ -1,20 +1,37 @@
-// type Something = {
-//   name: string;
-//   id: string;
-//   items?: [
-//     {
-//       name: string;
-//       description: string;
-//     }
-//   ];
-// };
-//
 /**
+ * Email formatted string
+ *
  * @format email
  */
-type email = string;
+type Email = string;
+
+/**
+ * Unix Time in ms
+ *
+ * @asType integer
+ */
+type Timestamp = number;
+
+/**
+ * uuid value
+ *
+ * @format uuid
+ */
+type UUID = string;
+
+type Maybe<T> = T | null;
+
+export type Something = {
+  name?: Maybe<string>;
+  arr?: Maybe<string[]>;
+  nested?: Maybe<{
+    name?: Maybe<string>;
+    lastName?: Maybe<string>;
+  }>;
+};
 
 export type Test = {
+  id: UUID;
   /**
    * Specify individual fields in items.
    *
@@ -22,28 +39,26 @@ export type Test = {
    * @minimum 0
    */
   posInteger: number;
-
+  ts: Timestamp;
+  /**
+   * @format float
+   */
+  float: number;
+  /**
+   * @pattern ^a
+   */
+  startsWithA: string;
+  email: Email;
   /**
    * Or specify a JSON spec:
    *
    * @minItems 1
    */
-  emails: email[];
+  emails: Email[];
   // obj: Test2;
-  // something: Something;
-  /**
-   * @format email
-   */
-  optional?: string;
+  something?: Maybe<Something>;
+  optional?: Maybe<string>;
+  nested: {
+    nestedEmail: Email;
+  };
 };
-
-// export type Test2 = {
-//   sizes: number;
-
-//   /**
-//    * Or specify a JSON spec:
-//    *
-//    * @items {"type":"string","format":"email"}
-//    */
-//   emails: string[];
-// };
