@@ -1,52 +1,52 @@
-import * as TJS from "typescript-json-schema";
-import fs from "fs";
-import path from "path";
+import { tsJsonSchmGen } from "./ts-json-schema-generator-test";
+import { tsJsonGen } from "./typescript-json-schema-test";
+import Ajv from "ajv";
 
-const settings: TJS.PartialArgs = {
-  required: true,
+const tsJsonSchema = tsJsonSchmGen();
+const typescriptJsonSchema = tsJsonGen();
+
+const ajv = new Ajv({ allErrors: true });
+
+const validator1 = ajv.compile(tsJsonSchema);
+const validator2 = ajv.compile(typescriptJsonSchema);
+// const validator3 = ajv.compile({
+//   "$schema": "http://json-schema.org/draft-07/schema#",
+//   "$ref": "#/definitions/Test",
+//   "definitions": {
+//     "Test": {
+//       "type": "object",
+//       "properties": {
+//         "size": {
+//           "description": "Specify individual fields in items.",
+//           "type": "integer",
+//           "minimum": 0
+//         },
+//         "emails": {
+//           "description": "Or specify a JSON spec:",
+//           "items": {
+//             "type": "string",
+//           },
+//           "type": "array"
+//         },
+//         "optional": {
+//           "type": "string"
+//         }
+//       },
+//       "additionalProperties": false,
+//       "required": [
+//         "emails",
+//         "size"
+//       ]
+//     }
+//   }
+// })
+
+const data = {
+  posInteger: 1,
+  emails: [],
+  optional: "test",
 };
 
-const tsconfigContent = fs.readFileSync(path.resolve(__dirname, "../tsconfig.json"));
-
-const compilerOptions: TJS.CompilerOptions = JSON.parse(tsconfigContent.toString()).compilerOptions;
-
-export type Test = {
-  /**
-   * Specify individual fields in items.
-   *
-   * @items.type integer
-   * @items.minimum 0
-   */
-  sizes: number;
-
-  /**
-   * Or specify a JSON spec:
-   *
-   * @items {"type":"string","format":"email"}
-   */
-  emails: string[];
-  obj: Test2;
-};
-
-export type Test2 = {
-  /**
-   * Specify individual fields in items.
-   *
-   * @items.type integer
-   * @items.minimum 0
-   */
-  sizes: number;
-
-  /**
-   * Or specify a JSON spec:
-   *
-   * @items {"type":"string","format":"email"}
-   */
-  emails: string[];
-};
-
-const program = TJS.getProgramFromFiles([path.resolve(__dirname, "./index.ts")], compilerOptions);
-
-const schemaString = TJS.generateSchema(program, "Test", settings);
-
-console.log(JSON.stringify(schemaString, null, 2));
+console.log("Validator 1", validator1(data));
+console.log("Validator 2", validator2(data));
+// console.log("Validator 3", validator3(data))
