@@ -1,10 +1,28 @@
-import { tsJsonSchmGen } from "./ts-json-schema-generator-test";
-import Ajv from "ajv";
+import { MakeSchemaGenerator, SchemaGeneratorConfig } from "./generateSchema";
+import path from "path";
+import Ajv, { Options as AjvOptions } from "ajv";
 import addFormats from "ajv-formats";
+import { validator } from "./createValidator";
+import { Test } from "./test.type";
 
-const tsJsonSchema = tsJsonSchmGen();
+const tsjConfig: SchemaGeneratorConfig = {
+  path: path.resolve(__dirname, "./test.type.ts"),
+  tsconfig: path.resolve(__dirname, "../tsconfig.json"),
+  type: "*",
+  // expose: "all"
+};
 
-const ajv = new Ajv({ allErrors: true });
+const schemaGenerator = MakeSchemaGenerator(tsjConfig);
+
+const schema = schemaGenerator.generateSchema();
+
+console.log(JSON.stringify(schema, null, 2));
+
+const ajvConfig: AjvOptions = {
+  allErrors: true,
+};
+
+const ajv = new Ajv(ajvConfig).addSchema(schema, "SCHEMA");
 addFormats(ajv);
 
 const data = {
@@ -12,43 +30,18 @@ const data = {
   posInteger: 1,
   float: 0.1231245,
   ts: Date.now(),
-  startsWithA: "omazing",
-  email: "not an email",
-  emails: ["not an email", "isEmail@test.com", "is not again"],
+  startsWithA: "amazing",
+  email: "nan",
+  emails: ["anotherEmail@test.com", "isEmail@test.com"],
   nested: {
     nestedEmail: "email@mail.com",
   },
 };
 
-const ajvValidator = ajv.compile(tsJsonSchema);
+const validatedRes = validator<Test>({ data, validationClient: ajv });
 
-const isNumber = (string: string) => /[0-9]/.test(string);
-
-const validator = (data: unknown) => {
-  console.log("validating data:", data);
-  console.log(JSON.parse(JSON.stringify(data)));
-  const valid = ajvValidator(data);
-  console.log("Validator 1 valid:", valid);
-  if (valid) return data;
-
-  const errors = ajvValidator.errors!;
-  const errMessages = errors.reduce<string[]>((acc, error) => {
-    if (error.instancePath === "") return [...acc, `Payload ${error.message}`];
-
-    const propSplit: string[] = error.instancePath.split("/").filter((s) => s !== "");
-    const propPath = propSplit.reduce<string>((acc, prop) => {
-      if (isNumber(prop)) return `${acc}[${prop}]`;
-      return acc !== "" ? `${acc}.${prop}` : prop;
-    }, "");
-    const errorMessage: string = `Property "${propPath}" ${error.message}`;
-    return [...acc, errorMessage];
-  }, []);
-
-  const validationErrors = {
-    validationErrors: errMessages,
-  };
-  console.log(validationErrors);
-  return validationErrors;
-};
-
-validator(data);
+if ("validationErrors" in validatedRes) {
+  console.log("VALIDATION ERRORS", validatedRes);
+} else {
+  console.log("VALID RES", validatedRes);
+}
