@@ -19,7 +19,7 @@
     "url": "git+https://github.com/Marlrus/generate-validator-ts.git"
   },
   "author": "Marlrus",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Marlrus/generate-validator-ts/issues"
   },
