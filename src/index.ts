@@ -4,7 +4,7 @@ import { MakeAjvClient } from "./create-ajv-client";
 import { createTemplate } from "./validator-template";
 import path from "path";
 import fs from "fs";
-import { Test } from "./test.type";
+import * as ExpectedTypes from "./test.type";
 
 const typePath = "./test.type.ts";
 
@@ -39,11 +39,14 @@ const data = {
 };
 
 export const ValidatorClient = MakeValidatorClient({
-  ajv: ajv.addSchema(schema, "SCHEMA"),
+  ajv,
   debug: true,
 });
 
-const validateTest = ValidatorClient.makeValidator<Test>({ typeName: "Test" });
+export const validateTest = ValidatorClient.makeValidator<ExpectedTypes.Test>({
+  typeName: "Test",
+  schema,
+});
 
 const validatedTest = validateTest(data);
 
@@ -58,7 +61,7 @@ const outPath = path.resolve(__dirname, `${renamedFile}`);
 
 console.log({ outPath });
 
-const template = createTemplate({ typeNames: ["Test"] });
+const template = createTemplate({ typeNames: ["Test"], schemaGenerator });
 
 console.log(template);
 

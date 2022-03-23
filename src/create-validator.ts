@@ -1,4 +1,5 @@
 import Ajv, { ErrorObject } from "ajv";
+import { Schema } from "./create-schema-client";
 
 type MakeValidatorMakerArgs = {
   ajv: Ajv;
@@ -13,6 +14,7 @@ type MaybeValidator<T> = T | ValidationErrors;
 
 type ValidateArgs = {
   typeName: string;
+  schema: Schema;
 };
 
 type MakeValidatorClientContract = (args: MakeValidatorMakerArgs) => {
@@ -40,11 +42,13 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({ ajv, debug = 
   const log = (...args: any) => (debug ? console.log(...args) : undefined);
 
   const makeValidator =
-    <T>({ typeName }) =>
+    <T>({ typeName, schema }) =>
     (data: unknown) => {
       const prefix = `[generate-ts-validator/validate]`;
 
       log(`${prefix} Args:`, { typeName });
+
+      ajv.addSchema(schema, "SCHEMA");
 
       log(`${prefix} Data:`, data);
 

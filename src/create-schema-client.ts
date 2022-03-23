@@ -9,6 +9,8 @@ type SchemaGeneratorContract = (args: SchemaGeneratorArgs) => {
   generateSchema: () => tsj.Schema;
 };
 
+export type Schema = tsj.Schema;
+
 export const MakeSchemaGenerator: SchemaGeneratorContract = ({ tsjConfig, debug = false }) => {
   const log = (...args: any) => (debug ? console.log(...args) : undefined);
   const prefix = `[generate-ts-validator/MakeSchemaGenerator]`;
