@@ -1,29 +1,26 @@
-import { MakeSchemaGenerator, SchemaGeneratorConfig } from "./generateSchema";
+import { MakeSchemaGenerator } from "./create-schema-client";
+import { MakeValidatorClient } from "./create-validator";
+import { MakeAjvClient } from "./create-ajv-client";
 import path from "path";
-import Ajv, { Options as AjvOptions } from "ajv";
-import addFormats from "ajv-formats";
-import { validator } from "./createValidator";
 import { Test } from "./test.type";
 
-const tsjConfig: SchemaGeneratorConfig = {
+const tsjConfig = {
   path: path.resolve(__dirname, "./test.type.ts"),
   tsconfig: path.resolve(__dirname, "../tsconfig.json"),
   type: "*",
   // expose: "all"
 };
 
-const schemaGenerator = MakeSchemaGenerator(tsjConfig);
+const schemaGenerator = MakeSchemaGenerator({ tsjConfig, debug: true });
 
 const schema = schemaGenerator.generateSchema();
 
-console.log(JSON.stringify(schema, null, 2));
-
-const ajvConfig: AjvOptions = {
+const ajvConfig = {
   allErrors: true,
 };
 
-const ajv = new Ajv(ajvConfig).addSchema(schema, "SCHEMA");
-addFormats(ajv);
+const ajv = MakeAjvClient({ ajvConfig, debug: true });
+ajv.addSchema(schema, "SCHEMA");
 
 const data = {
   id: "3e336960-e5bc-457e-9b29-0947fd5babef",
@@ -31,17 +28,19 @@ const data = {
   float: 0.1231245,
   ts: Date.now(),
   startsWithA: "amazing",
-  email: "nan",
+  email: "email@test.com",
   emails: ["anotherEmail@test.com", "isEmail@test.com"],
   nested: {
     nestedEmail: "email@mail.com",
   },
 };
 
-const validatedRes = validator<Test>({ data, validationClient: ajv });
+const validatorClient = MakeValidatorClient({ ajv, debug: true });
 
-if ("validationErrors" in validatedRes) {
-  console.log("VALIDATION ERRORS", validatedRes);
+const validatedTest = validatorClient.validate<Test>({ data, typeName: "Test" });
+
+if ("validationErrors" in validatedTest) {
+  console.log("VALIDATION ERRORS", validatedTest);
 } else {
-  console.log("VALID RES", validatedRes);
+  console.log("VALID RES", validatedTest);
 }
