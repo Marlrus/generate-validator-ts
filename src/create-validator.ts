@@ -12,12 +12,11 @@ type ValidationErrors = {
 type MaybeValidator<T> = T | ValidationErrors;
 
 type ValidateArgs = {
-  data: unknown;
   typeName: string;
 };
 
 type MakeValidatorClientContract = (args: MakeValidatorMakerArgs) => {
-  validate: <T>(args: ValidateArgs) => MaybeValidator<T>;
+  makeValidator: <T>(args: ValidateArgs) => (data: unknown) => MaybeValidator<T>;
 };
 
 const isNumber = (string: string) => /[0-9]/.test(string);
@@ -40,42 +39,44 @@ const parseValidationErrors = (
 export const MakeValidatorClient: MakeValidatorClientContract = ({ ajv, debug = false }) => {
   const log = (...args: any) => (debug ? console.log(...args) : undefined);
 
-  const validate = <T>({ data, typeName }) => {
-    const prefix = `[generate-ts-validator/validate]`;
+  const makeValidator =
+    <T>({ typeName }) =>
+    (data: unknown) => {
+      const prefix = `[generate-ts-validator/validate]`;
 
-    log(`${prefix} Args:`, { data, typeName });
+      log(`${prefix} Args:`, { typeName });
 
-    log(`${prefix} Data:`, data);
+      log(`${prefix} Data:`, data);
 
-    const validator = ajv.getSchema(`SCHEMA#/definitions/${typeName}`)!;
-    const valid = validator(data);
+      const validator = ajv.getSchema(`SCHEMA#/definitions/${typeName}`)!;
+      const valid = validator(data);
 
-    log(`${prefix} Data Valid:`, valid);
+      log(`${prefix} Data Valid:`, valid);
 
-    if (valid) {
-      if (debug) console.log(`${prefix} Data validated, returning data`);
-      return data as T;
-    }
+      if (valid) {
+        if (debug) console.log(`${prefix} Data validated, returning data`);
+        return data as T;
+      }
 
-    log(`${prefix} Data failed validation, processing errors`);
+      log(`${prefix} Data failed validation, processing errors`);
 
-    const errors = validator.errors!;
+      const errors = validator.errors!;
 
-    log(`${prefix} Errors:`, errors);
+      log(`${prefix} Errors:`, errors);
 
-    const errMessages = parseValidationErrors(errors);
+      const errMessages = parseValidationErrors(errors);
 
-    log(`${prefix} Parsed Errors:`, errMessages);
+      log(`${prefix} Parsed Errors:`, errMessages);
 
-    const validationErrors = {
-      validationErrors: errMessages,
+      const validationErrors = {
+        validationErrors: errMessages,
+      };
+
+      log(`${prefix} Error Object:`, validationErrors);
+      return validationErrors;
     };
 
-    log(`${prefix} Error Object:`, validationErrors);
-    return validationErrors;
-  };
-
   return {
-    validate,
+    makeValidator,
   };
 };
