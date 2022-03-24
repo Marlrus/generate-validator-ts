@@ -1,6 +1,6 @@
 import { ErrorObject } from "ajv";
-import { MakeAjvClient, MakeAjvClientArgs } from "./create-ajv-client";
-import { Schema } from "./create-schema-client";
+import { MakeAjvClient, MakeAjvClientArgs } from "./make-ajv-client";
+import { Schema } from "./make-schema-client";
 
 type MakeValidatorMakerArgs = {
   ajvClienArgs: MakeAjvClientArgs;
@@ -53,7 +53,7 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
     <T>({ typeName, schema }) =>
     (data: unknown) => {
       const rand = Math.random();
-      const prefix = `[generate-ts-validator/validate]`;
+      const prefix = `[generate-ts-validator/validate${typeName}]`;
       const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
       time(timeLabel);
       try {

@@ -1,5 +1,5 @@
-import { MakeSchemaGenerator } from "./create-schema-client";
-import { MakeValidatorClient } from "./create-validator";
+import { MakeSchemaGenerator, Schema } from "./make-schema-client";
+import { MakeValidatorClient } from "./make-validator";
 import { createTemplate } from "./validator-template";
 import path from "path";
 import fs from "fs";
@@ -28,13 +28,15 @@ export const ValidatorClient = MakeValidatorClient({
   debugTime: true,
 });
 
-// const renamedFile = typePath.split(".").slice(0, -1).join(".").concat(".validator.ts");
-// const outPath = path.resolve(__dirname, `${renamedFile}`);
+export type SchemaType = Schema;
 
-// console.log({ outPath });
+const renamedFile = typePath.split(".").slice(0, -1).join(".").concat(".validator.ts");
+const outPath = path.resolve(__dirname, `${renamedFile}`);
 
-// const template = createTemplate({ typeNames: ["Test", "Something"], schemaGenerator });
+console.log({ outPath });
 
-// console.log(template);
+const template = createTemplate({ typeNames: ["Test", "Something"], schemaGenerator });
 
-// fs.writeFileSync(outPath, template);
+console.log(template);
+
+fs.writeFileSync(outPath, template);

@@ -1,8 +1,7 @@
-import { ValidatorClient } from "./index";
-import { Schema } from "./create-schema-client";
+import { ValidatorClient, SchemaType } from "./index";
 import * as ExpectedTypes from "./test.type";
 
-const schema: Schema = {
+const schema: SchemaType = {
   $schema: "http://json-schema.org/draft-07/schema#",
   definitions: {
     Something: {

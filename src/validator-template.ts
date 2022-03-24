@@ -7,10 +7,9 @@ const createValidators = (typeNames: string[]) =>
 export const createTemplate = ({
   typeNames,
   schemaGenerator,
-}) => `import { ValidatorClient } from "./index";
-import { Schema } from "./create-schema-client";
+}) => `import { ValidatorClient, SchemaType } from "./index";
 import * as ExpectedTypes from "./test.type"
 
-const schema: Schema = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)}
+const schema: SchemaType = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)}
 ${createValidators(typeNames)}
 `;
