@@ -122,3 +122,7 @@ export const validateTest = ValidatorClient.makeValidator<ExpectedTypes.Test>({
   typeName: "Test",
   schema,
 });
+export const validateSomething = ValidatorClient.makeValidator<ExpectedTypes.Something>({
+  typeName: "Something",
+  schema,
+});
