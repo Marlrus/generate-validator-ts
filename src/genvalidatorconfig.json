@@ -17,10 +17,14 @@
   },
   "ajvClientOptions": {
     "debug": false,
-    "debugTime": false
+    "debugTime": true
   },
   "makeValidatorClientOptions": {
     "debug": false,
-    "debugTime": false
+    "debugTime": true
+  },
+  "makeSchemaGeneratorOptions": {
+    "debug": false,
+    "debugTime": true
   }
 }

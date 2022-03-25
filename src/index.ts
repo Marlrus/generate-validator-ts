@@ -27,7 +27,9 @@ const tsjConfig = {
   ...tsjConfigValues,
 };
 
-const schemaGenerator = MakeSchemaGenerator({ tsjConfig, debug: true });
+const { makeSchemaGeneratorOptions } = jsonConfig;
+
+const schemaGenerator = MakeSchemaGenerator({ tsjConfig, ...makeSchemaGeneratorOptions });
 
 const { ajvConfig } = config;
 
@@ -51,6 +53,5 @@ console.log({ outPath });
 
 const template = createTemplate({ typeNames: ["Test", "Something"], schemaGenerator });
 
-console.log(template);
-
 fs.writeFileSync(outPath, template);
+console.log("Generated Validators");

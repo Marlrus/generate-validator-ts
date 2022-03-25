@@ -15,6 +15,7 @@ export type GenerateTsValidtorConfig = {
   ajvConfig: AjvOptions;
   ajvClientOptions: DebugOptions;
   makeValidatorClientOptions: DebugOptions;
+  makeSchemaGeneratorOptions: DebugOptions;
 };
 
 export const DEFAULT_CONFIG: GenerateTsValidtorConfig = {
@@ -54,6 +55,12 @@ export const DEFAULT_CONFIG: GenerateTsValidtorConfig = {
     debugTime: false,
   },
   makeValidatorClientOptions: {
+    /* Execution logs and performance logs */
+    debug: false,
+    /* Performance logs only */
+    debugTime: false,
+  },
+  makeSchemaGeneratorOptions: {
     /* Execution logs and performance logs */
     debug: false,
     /* Performance logs only */
