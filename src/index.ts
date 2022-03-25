@@ -1,5 +1,5 @@
 import { MakeSchemaGenerator, Schema } from "./make-schema-client";
-import { MakeValidatorClient } from "./make-validator";
+import { MakeValidatorClient } from "./make-validator-client";
 import { createTemplate } from "./validator-template";
 import path from "path";
 import fs from "fs";

@@ -1,6 +1,12 @@
 import { ValidatorClient, SchemaType } from "./index";
 import * as ExpectedTypes from "./test.type";
 
+/* 
+This is a generated file through generate-validator-ts
+It contains validators for ["Test","Something"]
+The outupt can be modded by updating the configuration file
+*/
+
 const schema: SchemaType = {
   $schema: "http://json-schema.org/draft-07/schema#",
   definitions: {
@@ -117,11 +123,9 @@ const schema: SchemaType = {
   },
 };
 
-export const validateTest = ValidatorClient.makeValidator<ExpectedTypes.Test>({
-  typeName: "Test",
-  schema,
-});
-export const validateSomething = ValidatorClient.makeValidator<ExpectedTypes.Something>({
+const SchemaValidator = ValidatorClient.makeValidator({ schema });
+
+export const validateTest = SchemaValidator<ExpectedTypes.Test>({ typeName: "Test" });
+export const validateSomething = SchemaValidator<ExpectedTypes.Something>({
   typeName: "Something",
-  schema,
 });
