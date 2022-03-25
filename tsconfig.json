@@ -12,7 +12,8 @@
     "removeComments": true,
     "listEmittedFiles": true,
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

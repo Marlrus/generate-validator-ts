@@ -1,0 +1,26 @@
+{
+  "tsjConfig": {
+    "additionalProperties": false,
+    "encodeRefs": true,
+    "expose": "export",
+    "extraTags": [],
+    "jsDoc": "extended",
+    "minify": false,
+    "skipTypeCheck": false,
+    "sortProps": true,
+    "strictTuples": false,
+    "topRef": true,
+    "tsconfigPath": "../tsconfig.json"
+  },
+  "ajvConfig": {
+    "allErrors": true
+  },
+  "ajvClientOptions": {
+    "debug": false,
+    "debugTime": false
+  },
+  "makeValidatorClientOptions": {
+    "debug": false,
+    "debugTime": false
+  }
+}

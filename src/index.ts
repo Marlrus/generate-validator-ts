@@ -3,29 +3,43 @@ import { MakeValidatorClient } from "./make-validator-client";
 import { createTemplate } from "./validator-template";
 import path from "path";
 import fs from "fs";
-// import * as ExpectedTypes from "./test.type";
+import * as tsj from "ts-json-schema-generator";
+import { DEFAULT_CONFIG } from "./config";
+import jsonConfig from "./genvalidatorconfig.json";
+
+console.log({ jsonConfig });
+
+const config = {
+  ...DEFAULT_CONFIG,
+  ...jsonConfig,
+};
+
+const { tsconfigPath, ...tsjConfigValues } = config.tsjConfig as tsj.Config & {
+  tsconfigPath: string;
+};
 
 const typePath = "./test.type.ts";
 
 const tsjConfig = {
   path: path.resolve(__dirname, typePath),
-  tsconfig: path.resolve(__dirname, "../tsconfig.json"),
+  tsconfig: path.resolve(__dirname, tsconfigPath),
   type: "*",
-  // expose: "all"
+  ...tsjConfigValues,
 };
 
 const schemaGenerator = MakeSchemaGenerator({ tsjConfig, debug: true });
 
-const ajvConfig = {
-  allErrors: true,
-};
+const { ajvConfig } = config;
+
+const { ajvClientOptions } = config;
+const { makeValidatorClientOptions } = config;
 
 export const ValidatorClient = MakeValidatorClient({
   ajvClienArgs: {
     ajvConfig,
-    debugTime: true,
+    ...ajvClientOptions,
   },
-  debugTime: true,
+  ...makeValidatorClientOptions,
 });
 
 export type SchemaType = Schema;
