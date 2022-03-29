@@ -14,49 +14,49 @@ Inspired by [create-validator-ts](https://github.com/azu/create-validator-ts)
 
 ## Config options
 
-```json
+```json5
 {
   /* Options from https://github.com/vega/ts-json-schema-generator#options */
-  "tsjConfig": {
+  tsjConfig: {
     /* Allow additional properties for objects */
-    "additionalProperties": false,
+    additionalProperties: false,
     /* Encode refs in schema as valid URIs */
-    "encodeRefs": true,
+    encodeRefs: true,
     /* all: create shared ref for all types, none: no shared ref, export: create shared ref only for exported types */
-    "expose": "export",
+    expose: "export",
     /* Additional validation keywords to include */
-    "extraTags": [],
+    extraTags: [],
     /* none: no JsDoc annotations, basic: JsDoc provides schema properties, extended: read @nullable and @asType */
-    "jsDoc": "extended",
+    jsDoc: "extended",
     /* Minify generated schema */
-    "minify": false,
+    minify: false,
     /* skip type check for better performance */
-    "skipTypeCheck": false,
+    skipTypeCheck: false,
     /* sort properties */
-    "sortProps": true,
+    sortProps: true,
     /* Do not allow additional items on tuples */
-    "strictTuples": false,
+    strictTuples: false,
     /* Do not create a top level ref definition */
-    "topRef": true,
+    topRef: true,
     /* Path to tscnofig from root */
-    "tsconfigPath": "./tsconfig.json"
+    tsconfigPath: "./tsconfig.json",
   },
   /* any option seen on https://ajv.js.org/options.html#option-defaults */
-  "ajvConfig": {
-    "allErrors": true
+  ajvConfig: {
+    allErrors: true,
   },
-  "ajvClientOptions": {
+  ajvClientOptions: {
     /* Execution logs and performance logs */
-    "debug": false,
+    debug: false,
     /* Performance logs only */
-    "debugTime": false
+    debugTime: false,
   },
-  "makeValidatorClientOptions": {
+  makeValidatorClientOptions: {
     /* Execution logs and performance logs */
-    "debug": false,
+    debug: false,
     /* Performance logs only */
-    "debugTime": false
-  }
+    debugTime: false,
+  },
 }
 ```
 

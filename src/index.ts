@@ -37,7 +37,7 @@ const { ajvClientOptions } = config;
 const { makeValidatorClientOptions } = config;
 
 export const ValidatorClient = MakeValidatorClient({
-  ajvClienArgs: {
+  ajvClientArgs: {
     ajvConfig,
     ...ajvClientOptions,
   },

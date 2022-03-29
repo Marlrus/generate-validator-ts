@@ -1,4 +1,9 @@
-import { validateTest, validateSomething } from "./test.type.validator";
+import {
+  validateTest,
+  typeCastTest,
+  validateSomething,
+  typeCastSomething,
+} from "./test.type.validator";
 
 const data = {
   id: "3e336960-e5bc-457e-9b29-0947fd5babef",
@@ -21,7 +26,7 @@ const something = {
 
 const validation1 = validateTest(data);
 const validation2 = validateSomething(something);
-const validation3 = validateTest(data);
-const validation4 = validateSomething(something);
+const validation3 = typeCastTest(data);
+const validation4 = typeCastSomething(something);
 
 console.log({ validation1, validation2, validation3, validation4 });
