@@ -20,6 +20,7 @@ type SchemaInfoArgs = {
 
 type TypeNameArgs = {
   typeName: string;
+  throwError?: boolean;
 };
 
 type LoadSchema = (schemaInfoArgs: SchemaInfoArgs) => void;
@@ -72,7 +73,7 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
   };
 
   const makeTypeCaster: MakeTypeCaster =
-    <T>({ typeName }: TypeNameArgs) =>
+    <T>({ typeName, throwError = false }: TypeNameArgs) =>
     (data: unknown): T => {
       const rand = Math.random();
       const prefix = `[generate-ts-validator/typeCast${typeName}]`;
@@ -100,6 +101,8 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
         const errMessages = parseValidationErrors(errors);
 
         log(`${prefix} Parsed Errors:`, errMessages);
+
+        if (throwError) throw new TypeError(`\n${errMessages.join("\n")}`);
 
         const validationErrors = {
           validationErrors: errMessages,

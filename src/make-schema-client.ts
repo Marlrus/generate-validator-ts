@@ -6,9 +6,13 @@ type SchemaGeneratorArgs = {
   debugTime?: boolean;
 };
 
-type SchemaGeneratorContract = (args: SchemaGeneratorArgs) => {
-  generateSchema: () => tsj.Schema;
+type GenerateSchemaFunction = () => tsj.Schema;
+
+export type SchemaGeneratorClient = {
+  generateSchema: GenerateSchemaFunction;
 };
+
+type SchemaGeneratorContract = (args: SchemaGeneratorArgs) => SchemaGeneratorClient;
 
 export type Schema = tsj.Schema;
 

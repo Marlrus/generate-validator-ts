@@ -24,9 +24,16 @@ const something = {
   nested: null,
 };
 
-const validation1 = validateTest(data);
-const validation2 = validateSomething(something);
-const validation3 = typeCastTest(data);
-const validation4 = typeCastSomething(something);
-
-console.log({ validation1, validation2, validation3, validation4 });
+try {
+  const validation1 = validateTest(data);
+  console.log({ validation1 });
+  const validation2 = validateSomething(something);
+  console.log({ validation2 });
+  const validation3 = typeCastTest(data);
+  console.log({ validation3 });
+  const validation4 = typeCastSomething(something);
+  console.log({ validation4 });
+} catch (err) {
+  console.log("IN ERROR BLOCK");
+  console.log(err);
+}

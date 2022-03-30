@@ -52,7 +52,12 @@ const outPath = path.resolve(__dirname, `${renamedFile}`);
 
 console.log({ outPath });
 
-const template = createTemplate({ typeNames: ["Test", "Something"], schemaGenerator });
+const template = createTemplate({
+  typeNames: ["Test", "Something"],
+  typePath: "./test.type",
+  throwError: true,
+  schemaGenerator,
+});
 
 fs.writeFileSync(outPath, template);
 console.log("Generated Validators");

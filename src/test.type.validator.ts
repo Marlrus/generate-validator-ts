@@ -151,8 +151,5 @@ ValidatorClient.loadSchema({ schema });
 export const validateTest = ValidatorClient.makeValidator({ typeName: "Test" })
 export const validateSomething = ValidatorClient.makeValidator({ typeName: "Something" })
 
-export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test" })
-export const typeCastSomething = ValidatorClient.makeTypeCaster<ExpectedTypes.Something>({ typeName: "Something" })
-
-const test = typeCastTest({})
-const something = typeCastSomething({})
+export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test", throwError: false })
+export const typeCastSomething = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Something>>({ typeName: "Something", throwError: false })
