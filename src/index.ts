@@ -1,4 +1,4 @@
-import { MakeSchemaGenerator, Schema } from "./make-schema-client";
+import { MakeSchemaGenerator } from "./make-schema-client";
 import { MakeValidatorClient } from "./make-validator-client";
 import { createTemplate } from "./validator-template";
 import path from "path";
@@ -6,6 +6,9 @@ import fs from "fs";
 import * as tsj from "ts-json-schema-generator";
 import { DEFAULT_CONFIG } from "./config";
 import jsonConfig from "./genvalidatorconfig.json";
+
+export { MaybeValidator } from "./make-validator-client";
+export { Schema } from "./make-schema-client";
 
 console.log({ jsonConfig });
 
@@ -43,8 +46,6 @@ export const ValidatorClient = MakeValidatorClient({
   },
   ...makeValidatorClientOptions,
 });
-
-export type SchemaType = Schema;
 
 const renamedFile = typePath.split(".").slice(0, -1).join(".").concat(".validator.ts");
 const outPath = path.resolve(__dirname, `${renamedFile}`);

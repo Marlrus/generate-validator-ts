@@ -1,4 +1,4 @@
-import { ValidatorClient, SchemaType } from "./index";
+import { ValidatorClient, Schema, MaybeValidator } from "./index";
 import * as ExpectedTypes from "./test.type"
 
 /* 
@@ -7,7 +7,7 @@ It contains validators for ["Test","Something"]
 The outupt can be modded by updating the configuration file
 */
 
-const schema: SchemaType = {
+const schema: Schema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "Something": {
@@ -151,5 +151,8 @@ ValidatorClient.loadSchema({ schema });
 export const validateTest = ValidatorClient.makeValidator({ typeName: "Test" })
 export const validateSomething = ValidatorClient.makeValidator({ typeName: "Something" })
 
-export const typeCastTest = ValidatorClient.makeTypeCaster<ExpectedTypes.Test>({ typeName: "Test" })
+export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test" })
 export const typeCastSomething = ValidatorClient.makeTypeCaster<ExpectedTypes.Something>({ typeName: "Something" })
+
+const test = typeCastTest({})
+const something = typeCastSomething({})

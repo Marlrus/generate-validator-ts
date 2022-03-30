@@ -12,7 +12,7 @@ type ValidationErrors = {
   validationErrors: string[];
 };
 
-type MaybeValidator<T> = T | ValidationErrors;
+export type MaybeValidator<T> = T | ValidationErrors;
 
 type SchemaInfoArgs = {
   schema: Schema;
@@ -24,7 +24,7 @@ type TypeNameArgs = {
 
 type LoadSchema = (schemaInfoArgs: SchemaInfoArgs) => void;
 
-type MakeTypeCaster = <T>(typeNameArgs: TypeNameArgs) => (data: unknown) => MaybeValidator<T>;
+type MakeTypeCaster = <T>(typeNameArgs: TypeNameArgs) => (data: unknown) => T;
 
 type MakeValidator = (typeNameArgs: TypeNameArgs) => (data: unknown) => boolean;
 
@@ -73,7 +73,7 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
 
   const makeTypeCaster: MakeTypeCaster =
     <T>({ typeName }: TypeNameArgs) =>
-    (data: unknown): MaybeValidator<T> => {
+    (data: unknown): T => {
       const rand = Math.random();
       const prefix = `[generate-ts-validator/typeCast${typeName}]`;
       const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
@@ -103,10 +103,10 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
 
         const validationErrors = {
           validationErrors: errMessages,
-        };
+        } as unknown;
 
         log(`${prefix} Error Object:`, validationErrors);
-        return validationErrors;
+        return validationErrors as T;
       } finally {
         timeEnd(timeLabel);
       }
