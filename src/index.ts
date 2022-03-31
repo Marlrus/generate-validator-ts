@@ -62,4 +62,3 @@ const template = createTemplate({
 });
 
 fs.writeFileSync(outPath, template);
-console.log("Generated Validators");

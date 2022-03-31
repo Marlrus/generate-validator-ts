@@ -28,6 +28,8 @@ type CreateTemplateArgs = {
   schemaGenerator: SchemaGeneratorClient;
   throwError?: boolean;
   esModules?: boolean;
+  debug?: boolean;
+  debugTime?: boolean;
 };
 
 const esImport = (esModules: boolean) => (esModules ? ".js" : "");
@@ -41,24 +43,40 @@ const templateImports: TemplateImports = ({ throwError, esModules }) =>
 
 type CreateTemplate = (args: CreateTemplateArgs) => string;
 
-export const createTemplate: CreateTemplate = ({
-  typeNames,
-  typePath,
-  schemaGenerator,
-  throwError = false,
-  esModules = false,
-}) => `${templateImports({ throwError, esModules })}
-import * as ExpectedTypes from "${typePath}${esImport(esModules)}"
+export const createTemplate: CreateTemplate = (createTemplateArgs) => {
+  const {
+    typeNames,
+    typePath,
+    schemaGenerator,
+    throwError = false,
+    esModules = false,
+    debug = false,
+    debugTime = false,
+  } = createTemplateArgs;
+  const log = (...args: any) => (debug ? console.log(...args) : undefined);
+  const time = (label: any) => (debug || debugTime ? console.time(label) : undefined);
+  const timeEnd = (label: any) => (debug || debugTime ? console.timeEnd(label) : undefined);
+  const prefix = `[generate-ts-validator/createTemplate]`;
+  const rand = Math.random();
+  const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
 
-/* 
-This is a generated file through generate-validator-ts
-It contains validators for ${JSON.stringify(typeNames)}
-The outupt can be modded by updating the configuration file
-*/
+  time(timeLabel);
+  log(`${prefix} Args:`, createTemplateArgs);
+  const template = `${templateImports({ throwError, esModules })}
+  import * as ExpectedTypes from "${typePath}${esImport(esModules)}"
 
-const schema: Schema = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)}
+  /* 
+    This is a generated file through generate-validator-ts
+  It contains validators for ${JSON.stringify(typeNames)}
+  The outupt can be modded by updating the configuration file
+  */
 
-ValidatorClient.loadSchema({ schema });
-${createValidators({ typeNames })}
-${createTypeCasters({ typeNames, throwError })}
-`;
+  const schema: Schema = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)}
+
+  ValidatorClient.loadSchema({ schema });
+  ${createValidators({ typeNames })}
+  ${createTypeCasters({ typeNames, throwError })}
+  `;
+  timeEnd(timeLabel);
+  return template;
+};

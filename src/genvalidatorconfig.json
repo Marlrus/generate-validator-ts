@@ -29,6 +29,8 @@
   },
   "makeTemplateOptions": {
     "esModules": false,
-    "throwError": false
+    "throwError": false,
+    "debug": false,
+    "debugTime": true
   }
 }

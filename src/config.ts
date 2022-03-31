@@ -13,7 +13,7 @@ type DebugOptions = {
 type TemplateOptions = {
   esModules?: boolean;
   throwError?: boolean;
-};
+} & DebugOptions;
 
 export type GenerateTsValidtorConfig = {
   tsjConfig: TsjConfig;
@@ -74,8 +74,12 @@ export const DEFAULT_CONFIG: GenerateTsValidtorConfig = {
   },
   makeTemplateOptions: {
     /* Execution logs and performance logs */
-    esModules: false,
+    debug: false,
     /* Performance logs only */
+    debugTime: false,
+    /* Adds .js to end of imports if TS support for ES Modules is required */
+    esModules: false,
+    /* Validators throw errors or return validationErrors object */
     throwError: false,
   },
 };

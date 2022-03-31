@@ -1,13 +1,13 @@
 import { ValidatorClient, Schema, MaybeValidator } from "./index";
-import * as ExpectedTypes from "./test.type"
+  import * as ExpectedTypes from "./test.type"
 
-/* 
-This is a generated file through generate-validator-ts
-It contains validators for ["Test","Something"]
-The outupt can be modded by updating the configuration file
-*/
+  /* 
+    This is a generated file through generate-validator-ts
+  It contains validators for ["Test","Something"]
+  The outupt can be modded by updating the configuration file
+  */
 
-const schema: Schema = {
+  const schema: Schema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "Something": {
@@ -146,10 +146,11 @@ const schema: Schema = {
   }
 }
 
-ValidatorClient.loadSchema({ schema });
-
+  ValidatorClient.loadSchema({ schema });
+  
 export const validateTest = ValidatorClient.makeValidator({ typeName: "Test" })
 export const validateSomething = ValidatorClient.makeValidator({ typeName: "Something" })
-
+  
 export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test", throwError: false })
 export const typeCastSomething = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Something>>({ typeName: "Something", throwError: false })
+  

@@ -14,7 +14,7 @@ Inspired by [create-validator-ts](https://github.com/azu/create-validator-ts)
 
 ## Config options
 
-```json5
+```ts
 {
   /* Options from https://github.com/vega/ts-json-schema-generator#options */
   tsjConfig: {
@@ -56,6 +56,16 @@ Inspired by [create-validator-ts](https://github.com/azu/create-validator-ts)
     debug: false,
     /* Performance logs only */
     debugTime: false,
+  },
+  makeTemplateOptions: {
+    /* Execution logs and performance logs */
+    debug: false,
+    /* Performance logs only */
+    debugTime: false,
+    /* Adds .js to end of imports if TS support for ES Modules is required */
+    esModules: false,
+    /* Validators throw errors or return validationErrors object */
+    throwError: false,
   },
 }
 ```
