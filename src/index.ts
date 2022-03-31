@@ -1,6 +1,6 @@
 import { MakeSchemaGenerator } from "./make-schema-client";
 import { MakeValidatorClient } from "./make-validator-client";
-import { createTemplate } from "./validator-template";
+import { createTemplate } from "./make-validator-template";
 import path from "path";
 import fs from "fs";
 import * as tsj from "ts-json-schema-generator";
@@ -52,11 +52,13 @@ const outPath = path.resolve(__dirname, `${renamedFile}`);
 
 console.log({ outPath });
 
+const { makeTemplateOptions } = config;
+
 const template = createTemplate({
   typeNames: ["Test", "Something"],
   typePath: "./test.type",
-  throwError: true,
   schemaGenerator,
+  ...makeTemplateOptions,
 });
 
 fs.writeFileSync(outPath, template);

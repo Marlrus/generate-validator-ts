@@ -10,12 +10,18 @@ type DebugOptions = {
   debugTime?: boolean;
 };
 
+type TemplateOptions = {
+  esModules?: boolean;
+  throwError?: boolean;
+};
+
 export type GenerateTsValidtorConfig = {
   tsjConfig: TsjConfig;
   ajvConfig: AjvOptions;
   ajvClientOptions: DebugOptions;
   makeValidatorClientOptions: DebugOptions;
   makeSchemaGeneratorOptions: DebugOptions;
+  makeTemplateOptions: TemplateOptions;
 };
 
 export const DEFAULT_CONFIG: GenerateTsValidtorConfig = {
@@ -65,5 +71,11 @@ export const DEFAULT_CONFIG: GenerateTsValidtorConfig = {
     debug: false,
     /* Performance logs only */
     debugTime: false,
+  },
+  makeTemplateOptions: {
+    /* Execution logs and performance logs */
+    esModules: false,
+    /* Performance logs only */
+    throwError: false,
   },
 };

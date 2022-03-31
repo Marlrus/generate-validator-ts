@@ -27,14 +27,17 @@ type CreateTemplateArgs = {
   typePath: string;
   schemaGenerator: SchemaGeneratorClient;
   throwError?: boolean;
+  esModules?: boolean;
 };
 
-type TemplateImports = (throwError: boolean) => string;
+const esImport = (esModules: boolean) => (esModules ? ".js" : "");
 
-const templateImports: TemplateImports = (throwError) =>
+type TemplateImports = (TemplateImportsArgs: { throwError: boolean; esModules: boolean }) => string;
+
+const templateImports: TemplateImports = ({ throwError, esModules }) =>
   throwError
-    ? `import { ValidatorClient, Schema } from "./index";`
-    : `import { ValidatorClient, Schema, MaybeValidator } from "./index";`;
+    ? `import { ValidatorClient, Schema } from "./index${esImport(esModules)}";`
+    : `import { ValidatorClient, Schema, MaybeValidator } from "./index${esImport(esModules)}";`;
 
 type CreateTemplate = (args: CreateTemplateArgs) => string;
 
@@ -43,8 +46,9 @@ export const createTemplate: CreateTemplate = ({
   typePath,
   schemaGenerator,
   throwError = false,
-}) => `${templateImports(throwError)}
-import * as ExpectedTypes from "${typePath}"
+  esModules = false,
+}) => `${templateImports({ throwError, esModules })}
+import * as ExpectedTypes from "${typePath}${esImport(esModules)}"
 
 /* 
 This is a generated file through generate-validator-ts

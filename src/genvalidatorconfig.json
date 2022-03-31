@@ -26,5 +26,9 @@
   "makeSchemaGeneratorOptions": {
     "debug": false,
     "debugTime": true
+  },
+  "makeTemplateOptions": {
+    "esModules": false,
+    "throwError": false
   }
 }
