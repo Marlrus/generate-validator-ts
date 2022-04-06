@@ -1,4 +1,5 @@
 import { ErrorObject } from "ajv";
+import { v4 } from "uuid";
 import { MakeAjvClient, MakeAjvClientArgs } from "./make-ajv-client";
 import { Schema } from "./make-schema-client";
 
@@ -16,10 +17,12 @@ export type MaybeValidator<T> = T | ValidationErrors;
 
 type SchemaInfoArgs = {
   schema: Schema;
+  schemaId: string;
 };
 
 type TypeNameArgs = {
   typeName: string;
+  schemaId: string;
   throwError?: boolean;
 };
 
@@ -62,29 +65,29 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
   const timeEnd = (label: any) => (debug || debugTime ? console.timeEnd(label) : undefined);
   const ajv = MakeAjvClient(ajvClientArgs);
 
-  const loadSchema = ({ schema }) => {
-    const rand = Math.random();
+  const loadSchema = ({ schema, schemaId }) => {
+    const uuid = v4();
     const prefix = `[generate-ts-validator/loadSchema]`;
-    const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+    const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
     time(timeLabel);
     log(`${prefix} Loading Schema`);
-    ajv.addSchema(schema, "SCHEMA");
+    ajv.addSchema(schema, schemaId);
     timeEnd(timeLabel);
   };
 
   const makeTypeCaster: MakeTypeCaster =
-    <T>({ typeName, throwError = false }: TypeNameArgs) =>
+    <T>({ typeName, schemaId, throwError = false }: TypeNameArgs) =>
     (data: unknown): T => {
-      const rand = Math.random();
+      const uuid = v4();
       const prefix = `[generate-ts-validator/typeCast${typeName}]`;
-      const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+      const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
       time(timeLabel);
       try {
         log(`${prefix} Args:`, { typeName });
 
         log(`${prefix} Data:`, data);
 
-        const validator = ajv.getSchema(`SCHEMA#/definitions/${typeName}`)!;
+        const validator = ajv.getSchema(`${schemaId}#/definitions/${typeName}`)!;
         const valid = validator(data);
 
         if (valid) {
@@ -116,7 +119,7 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
     };
 
   const makeValidator: MakeValidator =
-    ({ typeName }: TypeNameArgs) =>
+    ({ typeName, schemaId }: TypeNameArgs) =>
     (data: unknown): boolean => {
       const rand = Math.random();
       const prefix = `[generate-ts-validator/validate${typeName}]`;
@@ -127,7 +130,7 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
 
         log(`${prefix} Data:`, data);
 
-        const validator = ajv.getSchema(`SCHEMA#/definitions/${typeName}`)!;
+        const validator = ajv.getSchema(`${schemaId}#/definitions/${typeName}`)!;
         const valid = validator(data);
 
         if (valid) {

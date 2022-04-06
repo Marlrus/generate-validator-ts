@@ -16,21 +16,21 @@
     "allErrors": true
   },
   "ajvClientOptions": {
-    "debug": false,
+    "debug": true,
     "debugTime": true
   },
   "makeValidatorClientOptions": {
-    "debug": false,
+    "debug": true,
     "debugTime": true
   },
   "makeSchemaGeneratorOptions": {
-    "debug": false,
+    "debug": true,
     "debugTime": true
   },
   "makeTemplateOptions": {
     "esModules": false,
     "throwError": false,
-    "debug": false,
+    "debug": true,
     "debugTime": true
   }
 }
