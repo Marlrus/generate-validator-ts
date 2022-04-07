@@ -11,7 +11,7 @@ type FunctionGenerator = (args: FunctionGeneratorArgs) => string;
 
 const createValidators: FunctionGenerator = ({ typeNames, schemaId }) =>
   typeNames.reduce<string>((acc, typeName) => {
-    const newValidator = `export const validate${typeName} = ValidatorClient.makeValidator({ typeName: "${typeName}", schemaId: "${schemaId}" })`;
+    const newValidator = `export const validate${typeName} = ValidatorClient.makeValidator({ typeName: "${typeName}", schemaId })`;
     return acc + "\n" + newValidator;
   }, "");
 
@@ -20,7 +20,7 @@ const createTypeCasters: FunctionGenerator = ({ typeNames, schemaId, throwError 
     const generic = throwError
       ? `<ExpectedTypes.${typeName}>`
       : `<MaybeValidator<ExpectedTypes.${typeName}>>`;
-    const newValidator = `export const typeCast${typeName} = ValidatorClient.makeTypeCaster${generic}({ typeName: "${typeName}", schemaId: "${schemaId}", throwError: ${throwError} })`;
+    const newValidator = `export const typeCast${typeName} = ValidatorClient.makeTypeCaster${generic}({ typeName: "${typeName}", schemaId, throwError: ${throwError} })`;
     return acc + "\n" + newValidator;
   }, "");
 
@@ -74,12 +74,13 @@ It contains validators for ${JSON.stringify(typeNames)}
 The outupt can be modded by updating the configuration file
 */
 
-const schema: Schema = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)}
+const schema: Schema = ${JSON.stringify(schemaGenerator.generateSchema(), null, 2)};
 
-ValidatorClient.loadSchema({ schema, schemaId: "${schemaId}" });
-  ${createValidators({ typeNames, schemaId })}
-  ${createTypeCasters({ typeNames, schemaId, throwError })}
-  `;
+const schemaId = "${uuid}";
+
+ValidatorClient.loadSchema({ schema, schemaId });
+${createValidators({ typeNames, schemaId })};
+${createTypeCasters({ typeNames, schemaId, throwError })};`;
   timeEnd(timeLabel);
   return template;
 };

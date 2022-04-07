@@ -144,13 +144,14 @@ const schema: Schema = {
       "additionalProperties": false
     }
   }
-}
+};
 
-ValidatorClient.loadSchema({ schema, schemaId: "4ee1bfe7-426c-4c46-8c96-97d1dabab43c" });
-  
-export const validateTest = ValidatorClient.makeValidator({ typeName: "Test", schemaId: "4ee1bfe7-426c-4c46-8c96-97d1dabab43c" })
-export const validateSomething = ValidatorClient.makeValidator({ typeName: "Something", schemaId: "4ee1bfe7-426c-4c46-8c96-97d1dabab43c" })
-  
-export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test", schemaId: "4ee1bfe7-426c-4c46-8c96-97d1dabab43c", throwError: false })
-export const typeCastSomething = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Something>>({ typeName: "Something", schemaId: "4ee1bfe7-426c-4c46-8c96-97d1dabab43c", throwError: false })
-  
+const schemaId = "9bd7a693-bd53-4c52-adad-273cb6f154ea";
+
+ValidatorClient.loadSchema({ schema, schemaId });
+
+export const validateTest = ValidatorClient.makeValidator({ typeName: "Test", schemaId })
+export const validateSomething = ValidatorClient.makeValidator({ typeName: "Something", schemaId });
+
+export const typeCastTest = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Test>>({ typeName: "Test", schemaId, throwError: false })
+export const typeCastSomething = ValidatorClient.makeTypeCaster<MaybeValidator<ExpectedTypes.Something>>({ typeName: "Something", schemaId, throwError: false });
