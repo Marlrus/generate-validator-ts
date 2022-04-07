@@ -60,8 +60,8 @@ export const createTemplate: CreateTemplate = (createTemplateArgs) => {
   const time = (label: any) => (debug || debugTime ? console.time(label) : undefined);
   const timeEnd = (label: any) => (debug || debugTime ? console.timeEnd(label) : undefined);
   const prefix = `[generate-ts-validator/createTemplate]`;
-  const rand = Math.random();
-  const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+  const uuid = v4();
+  const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
 
   time(timeLabel);
   log(`${prefix} Args:`, createTemplateArgs);

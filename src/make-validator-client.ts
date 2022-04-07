@@ -121,9 +121,9 @@ export const MakeValidatorClient: MakeValidatorClientContract = ({
   const makeValidator: MakeValidator =
     ({ typeName, schemaId }: TypeNameArgs) =>
     (data: unknown): boolean => {
-      const rand = Math.random();
+      const uuid = v4();
       const prefix = `[generate-ts-validator/validate${typeName}]`;
-      const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+      const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
       time(timeLabel);
       try {
         log(`${prefix} Args:`, { typeName });

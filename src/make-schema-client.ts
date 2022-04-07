@@ -1,4 +1,5 @@
 import * as tsj from "ts-json-schema-generator";
+import { v4 } from "uuid";
 
 type SchemaGeneratorArgs = {
   tsjConfig: tsj.Config;
@@ -23,8 +24,8 @@ export const MakeSchemaGenerator: SchemaGeneratorContract = ({
 }) => {
   const log = (...args: any) => (debug ? console.log(...args) : undefined);
   const prefix = `[generate-ts-validator/MakeSchemaGenerator]`;
-  const rand = Math.random();
-  const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+  const uuid = v4();
+  const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
   const time = (label: any) => (debug || debugTime ? console.time(label) : undefined);
   const timeEnd = (label: any) => (debug || debugTime ? console.timeEnd(label) : undefined);
 
@@ -33,8 +34,8 @@ export const MakeSchemaGenerator: SchemaGeneratorContract = ({
 
   const generateSchema = () => {
     const prefix = `[generate-ts-validator/generateSchema]`;
-    const rand = Math.random();
-    const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+    const uuid = v4();
+    const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
     time(timeLabel);
     const schema = tsj.createGenerator(tsjConfig).createSchema(tsjConfig.type);
     if (debug) log(`${prefix} Schema:`, JSON.stringify(schema, null, 2));

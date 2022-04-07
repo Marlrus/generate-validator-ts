@@ -1,4 +1,5 @@
 import Ajv, { Options as AjvOptions } from "ajv";
+import { v4 } from "uuid";
 import addFormats from "ajv-formats";
 
 export type MakeAjvClientArgs = {
@@ -18,8 +19,8 @@ export const MakeAjvClient: MakeAjvClientContract = ({
   const time = (label: any) => (debug || debugTime ? console.time(label) : undefined);
   const timeEnd = (label: any) => (debug || debugTime ? console.timeEnd(label) : undefined);
   const prefix = `[generate-ts-validator/MakeAjvClient]`;
-  const rand = Math.random();
-  const timeLabel = `${prefix} ${rand} EXECUTION TIME`;
+  const uuid = v4();
+  const timeLabel = `${prefix} ${uuid} EXECUTION TIME`;
 
   time(timeLabel);
   log(`${prefix} Args:`, { ajvConfig });
