@@ -2,16 +2,17 @@ import * as globby from "globby";
 import fs from "fs";
 import readline from "readline";
 
-const findPaths = () => {
-  const typeFilePaths = globby.sync(["**.type.ts"], {
-    ignore: ["node_modules"],
-    cwd: process.cwd(),
-    absolute: true,
-  });
+type FindPathsArgs = {
+  typeFileTerminations: string[];
+};
+
+const findPaths = ({ typeFileTerminations }: FindPathsArgs) => {
+  const searchPatterns = typeFileTerminations.map((termination) => `**${termination}`);
+  const typeFilePaths = globby.sync(searchPatterns, { ignore: ["node_modules"], absolute: true });
   return typeFilePaths;
 };
 
-const findTypes = async (absPath: string) => {
+const findExportedTypes = async (absPath: string) => {
   const readStream = fs.createReadStream(absPath);
   const rl = readline.createInterface({
     input: readStream,
@@ -30,11 +31,17 @@ const findTypes = async (absPath: string) => {
   return typeNames;
 };
 
+const findOutPath = (absPath: string) => {
+  const outPath = `${absPath.split(".ts")[0]}.validator.ts`;
+  return outPath;
+};
+
 const main = async () => {
-  const filePaths = findPaths();
+  const filePaths = findPaths({ typeFileTerminations: [".type.ts"] });
   for (const filePath of filePaths) {
-    const types = await findTypes(filePath);
-    console.log({ filePath, types });
+    const exportedTypes = await findExportedTypes(filePath);
+    const outPath = findOutPath(filePath);
+    console.log({ filePath, exportedTypes, outPath });
   }
 };
 
