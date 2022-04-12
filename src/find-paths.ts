@@ -1,18 +1,13 @@
 import * as globby from "globby";
-import path from "path";
 import fs from "fs";
 import readline from "readline";
 
 const findPaths = () => {
-  const typePaths = globby.sync(["**.type.ts"], { ignore: ["node_modules"] });
-
-  const typeFilePaths: string[] = [];
-
-  for (const typePath of typePaths) {
-    const absPath = path.resolve(process.cwd(), typePath);
-    typeFilePaths.push(absPath);
-  }
-
+  const typeFilePaths = globby.sync(["**.type.ts"], {
+    ignore: ["node_modules"],
+    cwd: process.cwd(),
+    absolute: true,
+  });
   return typeFilePaths;
 };
 
